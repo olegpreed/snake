@@ -5,11 +5,11 @@
 #include <time.h>
 
 #define HEIGHT 20
-#define WIDTH 100
+#define WIDTH 50
 
 #define KEY_SPACE 32
 
-#define SNAKE_MAX_SIZE 15
+#define SNAKE_MAX_SIZE 10
 #define SNAKE_MIN_SIZE 3
 
 typedef struct
@@ -101,7 +101,7 @@ void init(WINDOW **win, Vector *apple, Snake *snake, Exit *exit)
 		snake->parts[i].y = snake->parts[i - 1].y;
 		snake->parts[i].speed.x = 1;
 		snake->parts[i].speed.y = 0;
-		snake->parts[i].symbol = '#';
+		snake->parts[i].symbol = 'o';
 	}
 
 	exit->x = getRandNum(0, WIDTH);
@@ -163,31 +163,29 @@ void printSnake(Snake *snake)
 	{
 		if (snake->parts[i].eatApple)
 		{
-			snake->parts[i + 1].symbol = 'O';
+			snake->parts[i + 1].symbol = '0';
 			snake->parts[i].eatApple = false;
 			if (i == 0)
 				snake->parts[i].symbol = '@';
 			else
-				snake->parts[i].symbol = '#';
+				snake->parts[i].symbol = 'o';
 			snake->parts[i + 1].eatApple = true;
 			break;
 		}
 	}
-	refresh();
 	for (int i = 0; i < snake->size; i++)
 	{
 		mvaddch(snake->parts[i].y, snake->parts[i].x,
 			snake->parts[i].symbol);
-		refresh();
 	}
 	attroff(COLOR_PAIR(2));
 }
 
 void printFruit(Vector *apple)
 {
-	attron(COLOR_PAIR(1));
-	mvaddch(apple->y, apple->x, 'o');
-	attroff(COLOR_PAIR(1));
+	attron(COLOR_PAIR(5));
+	mvaddch(apple->y, apple->x, 'Q');
+	attroff(COLOR_PAIR(5));
 }
 
 void printWalls()
@@ -217,9 +215,9 @@ void snakeEat(Snake *snake, Vector *apple, Exit *exit, int *speed)
 		if (snake->size == SNAKE_MAX_SIZE)
 			exit->isOpen = true;
 		if (*speed > 30000)
-			*speed -= 5000;
+			*speed -= 1000;
 		snake->parts[0].eatApple = true;
-		snake->parts[snake->size - 1].symbol = '#';
+		snake->parts[snake->size - 1].symbol = 'o';
 		snake->parts[snake->size - 1].speed.x = snake->parts[snake->size - 2].speed.x;
 		snake->parts[snake->size - 1].speed.y = snake->parts[snake->size - 2].speed.y;
 		snake->parts[snake->size - 1].x = 
@@ -291,7 +289,6 @@ void main()
 		int pressed = wgetch(win);
 		keypress(pressed, &snake.parts[0]);
 		changeSnakePosition(&snake);
-		render(&snake, &apple, &exit);
 		if (exit.isOpen == false)
 			snakeEat(&snake, &apple, &exit, &speed);
 		else 
@@ -301,6 +298,7 @@ void main()
 		}
 		if (checkCollision(&snake, &exit))
 			printMsg("GAME OVER");
+		render(&snake, &apple, &exit);
 		usleep(speed);
 	}
 
