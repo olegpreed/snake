@@ -173,10 +173,12 @@ void printSnake(Snake *snake)
 			break;
 		}
 	}
+	refresh();
 	for (int i = 0; i < snake->size; i++)
 	{
-		mvaddstr(snake->parts[i].y, snake->parts[i].x,
-			&snake->parts[i].symbol);
+		mvaddch(snake->parts[i].y, snake->parts[i].x,
+			snake->parts[i].symbol);
+		refresh();
 	}
 	attroff(COLOR_PAIR(2));
 }
@@ -184,7 +186,7 @@ void printSnake(Snake *snake)
 void printFruit(Vector *apple)
 {
 	attron(COLOR_PAIR(1));
-	mvaddstr(apple->y, apple->x, "o");
+	mvaddch(apple->y, apple->x, 'o');
 	attroff(COLOR_PAIR(1));
 }
 
@@ -197,12 +199,12 @@ void printWalls()
 		if (i == 0 || i == height)
 		{
 			for (int j = 0; j <= width; j++)
-				mvaddstr(i, j, "+");
+				mvaddch(i, j, '+');
 		}
 		else
 		{
-			mvaddstr(i, 0, "+");
-			mvaddstr(i, width, "+");
+			mvaddch(i, 0, '+');
+			mvaddch(i, width, '+');
 		}
 	}
 }
@@ -236,7 +238,7 @@ void render(Snake *snake, Vector *apple, Exit *exit)
 	if (exit->isOpen == false)
 		printFruit(apple);
 	else
-		mvaddstr(exit->y, exit->x, " ");
+		mvaddch(exit->y, exit->x, ' ');
 	printSnake(snake);
 }
 
