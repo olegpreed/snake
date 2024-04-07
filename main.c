@@ -207,9 +207,20 @@ void printWalls()
 	}
 }
 
+void printScore(Snake *snake)
+{
+	attron(COLOR_PAIR(6));
+	char score[10];
+	bzero(score, 10);
+	sprintf(score, "%d / %d", snake->size - SNAKE_MIN_SIZE, SNAKE_MAX_SIZE - SNAKE_MIN_SIZE);
+	mvaddstr(HEIGHT, WIDTH + 2, score);
+	attroff(COLOR_PAIR(6));
+}
+
 void snakeEat(Snake *snake, Vector *apple, Exit *exit, int *speed)
 {
-	if (snake->parts[0].x == apple->x && snake->parts[0].y == apple->y)
+	if (!exit->isOpen && 
+		snake->parts[0].x == apple->x && snake->parts[0].y == apple->y)
 	{
 		snake->size++;
 		if (snake->size == SNAKE_MAX_SIZE)
@@ -238,6 +249,7 @@ void render(Snake *snake, Vector *apple, Exit *exit)
 	else
 		mvaddch(exit->y, exit->x, ' ');
 	printSnake(snake);
+	printScore(snake);
 }
 
 bool checkCollision(Snake *snake, Exit *exit)
@@ -271,7 +283,7 @@ bool checkCollision(Snake *snake, Exit *exit)
 
 bool checkEscape(Snake *snake, Exit *exit)
 {
-	if (snake->parts[snake->size - 1].x == exit->x 
+	if (exit->isOpen && snake->parts[snake->size - 1].x == exit->x 
 		&& snake->parts[snake->size - 1].y == exit->y)
 		return true;
 	return false;
@@ -289,16 +301,12 @@ void main()
 		int pressed = wgetch(win);
 		keypress(pressed, &snake.parts[0]);
 		changeSnakePosition(&snake);
-		if (exit.isOpen == false)
-			snakeEat(&snake, &apple, &exit, &speed);
-		else 
-		{
-			if (checkEscape(&snake, &exit))
+		snakeEat(&snake, &apple, &exit, &speed);
+		render(&snake, &apple, &exit);
+		if (checkEscape(&snake, &exit))
 				printMsg("YOU ESCAPED!");	
-		}
 		if (checkCollision(&snake, &exit))
 			printMsg("GAME OVER");
-		render(&snake, &apple, &exit);
 		usleep(speed);
 	}
 
