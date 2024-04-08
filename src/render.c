@@ -35,6 +35,8 @@ void printSnake(Snake *snake)
 	}
 	for (int i = 0; i < snake->size; i++)
 	{
+		if (snake->parts[i].pos.x > 0 && snake->parts[i].pos.x < WIDTH &&
+			snake->parts[i].pos.y >= 0 && snake->parts[i].pos.y <= HEIGHT)
 		mvaddch(snake->parts[i].pos.y, snake->parts[i].pos.x,
 			snake->parts[i].symbol);
 	}
@@ -58,31 +60,30 @@ void printFruit(Fruit *fruit)
 	attroff(COLOR_PAIR(5));
 }
 
-void printWalls()
+void printLevel(Exit *exit)
 {
-	int height = HEIGHT;
-	int width = WIDTH;
-	for (int i = 0; i <= height; i++)
+	attron(COLOR_PAIR(4));
+	for (int i = 0; i <= HEIGHT; i++)
 	{
-		if (i == 0 || i == height)
+		for (int j = 0; j <= WIDTH; j++)
 		{
-			for (int j = 0; j <= width; j++)
-				mvaddch(i, j, '+');
-		}
-		else
-		{
-			mvaddch(i, 0, '+');
-			mvaddch(i, width, '+');
+			if (j == 0 || j == WIDTH)
+				mvaddch(i, j, WALL_SYMBOL);
 		}
 	}
+	if (exit->isOpen)
+		mvaddch(exit->pos.y, exit->pos.x, ' ');
+	attroff(COLOR_PAIR(4));
 }
 
 void printScore(Snake *snake)
 {
-	attron(COLOR_PAIR(6));
+	attron(COLOR_PAIR(42));
 	char score[10];
 	bzero(score, 10);
-	sprintf(score, "%d / %d", snake->size - SNAKE_MIN_SIZE, SNAKE_MAX_SIZE - SNAKE_MIN_SIZE);
+	sprintf(score, "%d / %d", 
+		snake->size - SNAKE_MIN_SIZE,
+			SNAKE_MAX_SIZE - SNAKE_MIN_SIZE);
 	mvaddstr(HEIGHT, WIDTH + 2, score);
 	attroff(COLOR_PAIR(6));
 }
@@ -90,11 +91,9 @@ void printScore(Snake *snake)
 void render(Snake *snake, Fruit *fruit, Exit *exit)
 {
 	erase();
-	printWalls();
-	if (exit->isOpen == false)
+	printLevel(exit);
+	if (!exit->isOpen)
 		printFruit(fruit);
-	else
-		mvaddch(exit->pos.y, exit->pos.x, ' ');
 	printSnake(snake);
 	printScore(snake);
 }

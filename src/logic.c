@@ -33,6 +33,10 @@ void snakeMoves(Snake *snake)
 				snake->parts[i].pos.y += 1;
 				break;
 		}
+		if (snake->parts[i].pos.y == -1)
+			snake->parts[i].pos.y = HEIGHT;
+		else if (snake->parts[i].pos.y == HEIGHT + 1)
+			snake->parts[i].pos.y = 0;
 		if (i != 0)
 			snake->parts[i].direction = snake->parts[i - 1].direction;
 	}
@@ -114,8 +118,9 @@ bool checkCollision(Snake *snake, Exit *exit)
 
 bool checkEscape(Snake *snake, Exit *exit)
 {
-	if (exit->isOpen && snake->parts[snake->size - 1].pos.x == exit->pos.x 
-		&& snake->parts[snake->size - 1].pos.y == exit->pos.y)
+	if (exit->isOpen
+		&& snake->parts[snake->size - 1].pos.x == exit->pos.x 
+			&& snake->parts[snake->size - 1].pos.y == exit->pos.y)
 		return true;
 	return false;
 }

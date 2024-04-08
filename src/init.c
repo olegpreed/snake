@@ -3,18 +3,24 @@
 void init_colors()
 {
 	start_color();
+	use_default_colors();
 	init_color(COLOR_RED, INIT_COLOR_RED);
 	init_color(COLOR_GREEN, INIT_COLOR_GREEN);
 	init_color(COLOR_YELLOW, INIT_COLOR_YELLOW);
 	init_color(COLOR_BLUE, INIT_COLOR_BLUE);
 	init_color(COLOR_MAGENTA, INIT_COLOR_MAGENTA);
 	init_color(COLOR_CYAN, INIT_COLOR_CYAN);
-	init_pair(1, COLOR_RED, COLOR_BLACK);
-	init_pair(2, COLOR_GREEN, COLOR_BLACK);
-	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
-	init_pair(4, COLOR_BLUE, COLOR_BLACK);
-	init_pair(5, COLOR_MAGENTA, COLOR_BLACK);
-	init_pair(6, COLOR_CYAN, COLOR_BLACK);
+	init_color(COLOR_GRAY, INIT_COLOR_GRAY);
+	init_color(COLOR_BLACK, INIT_COLOR_BLACK);
+	init_color(COLOR_WHITE, INIT_COLOR_WHITE);
+	init_pair(1, COLOR_RED, -1);
+	init_pair(2, COLOR_GREEN, -1);
+	init_pair(3, COLOR_YELLOW, -1);
+	init_pair(4, COLOR_WHITE, -1);
+	init_pair(5, COLOR_MAGENTA, -1);
+	init_pair(6, COLOR_CYAN, -1);
+	init_pair(7, COLOR_BLUE, -1);
+	init_pair(42, COLOR_WHITE, -1);
 }
 
 void init_fruit(Fruit *fruit)

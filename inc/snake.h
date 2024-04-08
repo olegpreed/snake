@@ -28,7 +28,7 @@ bool checkEscape(Snake *snake, Exit *exit);
 void printMsg(char *str);
 void printSnake(Snake *snake);
 void printFruit(Fruit *fruit);
-void printWalls();
+void printWalls(Exit *exit);
 void printScore(Snake *snake);
 void render(Snake *snake, Fruit *fruit, Exit *exit);
 

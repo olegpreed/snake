@@ -18,6 +18,7 @@
 #define SNAKE_HEAD_SYMBOL '@'
 #define SNAKE_BODY_SYMBOL 'o'
 #define SNAKE_BODY_FULL_SYMBOL 'O'
+#define WALL_SYMBOL 'H'
 
 // Define color initialization values
 #define INIT_COLOR_RED      1000, 0, 0
@@ -26,5 +27,10 @@
 #define INIT_COLOR_BLUE     0, 0, 1000
 #define INIT_COLOR_MAGENTA  1000, 0, 1000
 #define INIT_COLOR_CYAN     0, 1000, 1000
+#define INIT_COLOR_GRAY     100, 100, 100
+#define INIT_COLOR_BLACK    0, 0, 0
+#define INIT_COLOR_WHITE    1000, 1000, 1000
+
+#define COLOR_GRAY 8
 
 #endif
